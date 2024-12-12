@@ -11,7 +11,7 @@ import { addNodeWithDepth, findExistingNode, ensureUniqueNodeId } from "@/utils/
 import React from "react";
 
 // Dynamically import Graph component
-const Graph = dynamic(() => import('react-d3-graph').then(mod => mod.Graph), {
+const Graph = dynamic(() => import('react-d3-graph').then(mod => mod.Graph as unknown as React.ComponentType<GraphProps<GraphNode, GraphLink>>), {
   ssr: false,
 });
 
@@ -41,22 +41,22 @@ const GraphComponent = React.memo<GraphProps<GraphNode, GraphLink>>(function Gra
   )
 });
 
-const NodeComponent = React.memo(function NodeComponent({ node }: { node: Node }) {
-  return (
-    node.visible ? (
-      <foreignObject width="200" height="100">
-        <div style={{ textAlign: "center" }}>
-          <img
-            src={node.image}
-            alt={node.title}
-            style={{ width: "200px", height: "100px", borderRadius: "50%" }}
-          />
-          <div>{node.title}</div>
-        </div>
-      </foreignObject>
-    ) : null
-  )
-});
+// const NodeComponent = React.memo(function NodeComponent({ node }: { node: Node }) {
+//   return (
+//     node.visible ? (
+//       <foreignObject width="200" height="100">
+//         <div style={{ textAlign: "center" }}>
+//           <img
+//             src={node.image}
+//             alt={node.title}
+//             style={{ width: "200px", height: "100px", borderRadius: "50%" }}
+//           />
+//           <div>{node.title}</div>
+//         </div>
+//       </foreignObject>
+//     ) : null
+//   )
+// });
 
 
 export default function Home() {
@@ -113,7 +113,7 @@ export default function Home() {
   //   }
   // }),[zoom])
 
-  const config: Partial<GraphConfiguration<GraphNode & Node, GraphLink>> = useMemo(() => ({
+  const config  = useMemo(() => ({
     "automaticRearrangeAfterDropNode": false,
     "collapsible": false,
     "directed": false,
@@ -178,6 +178,7 @@ export default function Home() {
       "strokeDashoffset": 0,
       "strokeLinecap": "butt"
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }),[zoom])
 
   const handleNodeClick = useCallback(async (nodeId: string) => {
@@ -195,8 +196,8 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
       });
 
-      let newNodes: Node[] = [];
-      let newLinks: GraphLink[] = [];
+      const newNodes: Node[] = [];
+      const newLinks: GraphLink[] = [];
       
       // Process each node from the response
       response.data.nodes.forEach((responseNode) => {
@@ -282,8 +283,8 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
       });
 
-      let newNodes: Node[] = [];
-      let newLinks: GraphLink[] = [];
+      const newNodes: Node[] = [];
+      const newLinks: GraphLink[] = [];
       let targetId: string = "";
       let targetDepth: number = 0;
 
@@ -363,7 +364,7 @@ export default function Home() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  const handleModalClose = (node) => {
+  const handleModalClose = () => {
     setIsModalOpen(false);
     setHoveredNode(null);
   };

@@ -16,7 +16,7 @@ export const findExistingNode = (newNode: Node, existingNodes: Node[]) => {
 };
 
 // Modify the function to generate a unique ID if necessary
-export const ensureUniqueNodeId = (nodeId?: string, depth:number): string => {
+export const ensureUniqueNodeId = (nodeId: string, depth:number): string => {
   return nodeId ? nodeId : `${depth}-${uuidv4()}`;  // Generate a new UUID if the nodeId is empty or undefined
 };
 
