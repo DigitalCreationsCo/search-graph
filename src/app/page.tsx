@@ -41,22 +41,17 @@ const GraphComponent = React.memo<GraphProps<GraphNode, GraphLink>>(function Gra
   )
 });
 
-// const NodeComponent = React.memo(function NodeComponent({ node }: { node: Node }) {
-//   return (
-//     node.visible ? (
-//       <foreignObject width="200" height="100">
-//         <div style={{ textAlign: "center" }}>
-//           <img
-//             src={node.image}
-//             alt={node.title}
-//             style={{ width: "200px", height: "100px", borderRadius: "50%" }}
-//           />
-//           <div>{node.title}</div>
-//         </div>
-//       </foreignObject>
-//     ) : null
-//   )
-// });
+const NodeComponent = React.memo(function NodeComponent({ node }: { node: Node }) {
+  return (
+    node.visible ? (
+        <img
+          src={node.image}
+          alt={node.title}
+          className='h-full w-full object-cover rounded-full'
+        />
+    ) : <></>
+  )
+});
 
 
 export default function Home() {
@@ -82,38 +77,7 @@ export default function Home() {
     isLoading: graphData.isLoading
   }), [graphData.nodes, graphData.links, graphData.isLoading]);
 
-  // const config: Partial<GraphConfiguration<GraphNode & Node, GraphLink>> = useMemo(() => ({
-  //   height: graphContainer.current?.clientHeight || 600,
-  //   width: graphContainer.current?.clientWidth || 1000,
-  //   focusZoom: zoom,
-  //   panAndZoom: true,
-  //   d3: {
-  //     gravity: -300, // Spread nodes out
-  //     linkLength: 200, // Increase link length
-  //     disableLinkForce: false, // Enable link forces
-  //   },
-  //   collapsible: true,
-  //   nodeHighlightBehavior: true,
-  //   highlightDegree: 1,
-  //   node: {
-  //     labelProperty: "title",
-  //     labelPosition: 'bottom',
-  //     renderLabel: true,
-  //     symbolType: 'circle',
-  //     fontColor: '#fff',
-  //     size: 500,
-  //     fontSize: 12,
-  //     viewGenerator: (node) => <NodeComponent node={node} />,
-  //   link: { 
-  //     renderLabel: false,
-  //     highlightColor: "blue",
-  //     semanticStrokeWidth: true
-  //   },
-  //   directed: false,
-  //   }
-  // }),[zoom])
-
-  const config  = useMemo(() => ({
+  const config: Partial<GraphConfiguration<GraphNode & Node, GraphLink>>  = useMemo(() => ({
     "automaticRearrangeAfterDropNode": false,
     "collapsible": false,
     "directed": false,
@@ -128,7 +92,7 @@ export default function Home() {
     "maxZoom": 8,
     "minZoom": 0.1,
     "nodeHighlightBehavior": false,
-    "panAndZoom": false,
+    "panAndZoom": true,
     "staticGraph": false,
     "staticGraphWithDragAndDrop": false,
     "d3": {
@@ -141,7 +105,7 @@ export default function Home() {
     "node": {
       "color": "#d3d3d3",
       "fontColor": "#fff",
-      "fontSize": 8,
+      "fontSize": 10,
       "fontWeight": "normal",
       "highlightColor": "SAME",
       "highlightFontSize": 8,
@@ -149,16 +113,19 @@ export default function Home() {
       "highlightStrokeColor": "SAME",
       "highlightStrokeWidth": "SAME",
       "labelProperty": "title",
+      "labelPosition": 'bottom',
       "mouseCursor": "pointer",
       "opacity": 1,
       "renderLabel": true,
-      "size": 200,
+      "size": 500,
       "strokeColor": "none",
       "strokeWidth": 1.5,
       "svg": "",
-      "symbolType": "circle"
+      "symbolType": "circle",
+      viewGenerator: (node) => <NodeComponent node={node} />,
     },
     "link": {
+  //     semanticStrokeWidth: true
       "color": "#d3d3d3",
       "fontColor": "black",
       "fontSize": 8,
@@ -166,7 +133,7 @@ export default function Home() {
       "highlightColor": "SAME",
       "highlightFontSize": 8,
       "highlightFontWeight": "normal",
-      "labelProperty": "label",
+      "labelProperty": "source",
       "mouseCursor": "pointer",
       "opacity": 1,
       "renderLabel": false,
